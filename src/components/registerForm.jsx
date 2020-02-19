@@ -2,19 +2,24 @@ import React from "react";
 import Joi from "@hapi/joi";
 import Form from "./common/form";
 
-class LoginForm extends Form {
+class RegisterForm extends Form {
   state = {
-    data: { username: "", password: "" },
+    data: { username: "", password: "", name: "" },
     errors: {}
   };
 
   schema = Joi.object({
     username: Joi.string()
       .required()
+      .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
       .label("Username"),
     password: Joi.string()
       .required()
       .label("Password")
+      .min(5),
+    name: Joi.string()
+      .required()
+      .label("Name")
   });
 
   doSubmit = () => {
@@ -25,24 +30,17 @@ class LoginForm extends Form {
   render() {
     return (
       <div>
-        <h1>Login</h1>
+        <h1>Register</h1>
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("username", "Username")}
           {this.renderInput("password", "Password", "password")}
+          {this.renderInput("name", "Name")}
 
-          {/*           <Input
-            name="password"
-            value={data.password}
-            label="Password"
-            onChange={this.handleChange}
-            error={errors.password}
-          /> */}
-
-          {this.renderButton("Login")}
+          {this.renderButton("Register")}
         </form>
       </div>
     );
   }
 }
 
-export default LoginForm;
+export default RegisterForm;
